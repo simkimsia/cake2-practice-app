@@ -1,0 +1,13 @@
+/app/Config/database.php
+/app/tmp/cache/models/*
+/app/tmp/cache/persistent/*
+/app/tmp/cache/views/*
+/app/logs/*
+/app/sessions/*
+/app/tests/*
+!/app/tmp/cache/models/empty
+!/app/tmp/cache/persistent/empty
+!/app/tmp/cache/views/empty
+!/app/logs/empty
+!/app/sessions/empty
+!/app/tests/empty
