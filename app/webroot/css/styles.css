@@ -1,0 +1,27 @@
+/**
+ *
+ * Custom General CSS
+ *
+ * Organization name and url
+ * Copyright year, organization name and url
+ *
+ *
+ * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @package       app.webroot.css
+ * @since         CakePHP(tm)
+ */
+
+.logout-link a{
+	float: right;
+	color: white;
+	
+}
+
+#header {
+	width: 98%;
+}
+
+#header h1{
+	float: left;
+}
