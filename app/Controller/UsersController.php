@@ -6,7 +6,6 @@
  */
 class UsersController extends AppController {
 
-	
 /**
  * method that is executed before calling action methods
  * 

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>app/View/Layouts/default.ctp</string>
+	<string>app/Controller/UsersController.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -13,6 +13,8 @@
 			<string>app</string>
 			<key>regexFolderFilter</key>
 			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>selected</key>
+			<true/>
 			<key>sourceDirectory</key>
 			<string>app</string>
 		</dict>
@@ -49,19 +51,33 @@
 	<integer>200</integer>
 	<key>metaData</key>
 	<dict>
+		<key>app/Controller/AppController.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>5</integer>
+				<key>line</key>
+				<integer>57</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>19</integer>
+		</dict>
 		<key>app/Controller/UsersController.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>36</integer>
+				<integer>17</integer>
 				<key>line</key>
-				<integer>125</integer>
+				<integer>119</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>115</integer>
+			<integer>95</integer>
 		</dict>
 		<key>app/View/Layouts/default.ctp</key>
 		<dict>
@@ -70,27 +86,27 @@
 				<key>column</key>
 				<integer>3</integer>
 				<key>line</key>
-				<integer>42</integer>
+				<integer>48</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>30</integer>
+			<integer>21</integer>
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>18</integer>
+				<integer>41</integer>
 				<key>line</key>
-				<integer>44</integer>
+				<integer>48</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
 				<integer>3</integer>
 				<key>line</key>
-				<integer>42</integer>
+				<integer>48</integer>
 			</dict>
 		</dict>
 		<key>app/View/Users/register.ctp</key>
@@ -107,7 +123,7 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>app/tmp/logs/error.log</key>
+		<key>app/tmp/cache/models/cake_model_default_users</key>
 		<dict>
 			<key>caret</key>
 			<dict>
@@ -151,6 +167,20 @@
 				<integer>24</integer>
 			</dict>
 		</dict>
+		<key>lib/Cake/Controller/Component/AuthComponent.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>4</integer>
+				<key>line</key>
+				<integer>622</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>584</integer>
+		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
@@ -158,11 +188,13 @@
 		<string>app/View/Layouts/default.ctp</string>
 		<string>app/webroot/css/styles.css</string>
 		<string>app/Controller/UsersController.php</string>
-		<string>app/tmp/logs/error.log</string>
+		<string>app/tmp/cache/models/cake_model_default_users</string>
+		<string>app/Controller/AppController.php</string>
+		<string>lib/Cake/Controller/Component/AuthComponent.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{203, 52}, {1230, 826}}</string>
+	<string>{{306, 52}, {1127, 826}}</string>
 </dict>
 </plist>
