@@ -1,0 +1,9 @@
+[submodule "app/Plugin/debug_kit"]
+	path = app/Plugin/debug_kit
+	url = git://github.com/cakephp/debug_kit.git
+[submodule "app/Plugin/migrations"]
+	path = app/Plugin/migrations
+	url = git://github.com/CakeDC/migrations.git
+[submodule "app/Plugin/acl_extras"]
+	path = app/Plugin/acl_extras
+	url = git://github.com/markstory/acl_extras.git
