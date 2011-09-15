@@ -5,8 +5,7 @@ $key (string) – The identifier of the configuration file to load.
 $config (string) – The alias of the configured reader.
 $merge (boolean) – Whether or not the contents of the read file should be merged, or overwrite the existing values.
 */
-Configure::load('permissions');
-Configure::load('course_authorize');
+Configure::load('permissions', 'course_permission');
 
 class CourseAuthorize extends BaseAuthorize {
 
@@ -19,7 +18,7 @@ class CourseAuthorize extends BaseAuthorize {
  */
 	public function authorize($user, CakeRequest $request) {
 		
-		
+		CakeLog::write('error', 'enters here');
 		if (!empty($user['admin'])) {
 			return true;
 		}
