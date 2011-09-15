@@ -2,7 +2,7 @@ app/Config/database.php
 app/tmp/cache/models/*
 app/tmp/cache/persistent/*
 app/tmp/cache/views/*
-app/logs/*
+app/tmp/logs/*
 app/sessions/*
 app/tests/*
 !app/tmp/cache/models/empty
@@ -12,5 +12,6 @@ app/tests/*
 !app/sessions/empty
 !app/tests/empty
 .DS_Store
+*.DS_Store
 tags
 *.tmproj
