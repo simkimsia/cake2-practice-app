@@ -22,16 +22,18 @@ class CourseAuthorize extends BaseAuthorize {
 		if (!empty($user['admin'])) {
 			return true;
 		}
-		
+		CakeLog::write('error', 'line 25');		
 		$role = Configure::read('Permissions.' . $this->action($request));
 		
 		if (!$role) {
+					CakeLog::write('error', 'line 29');	
 			return false;
 		}
 		if ($role === '*') {
+					CakeLog::write('error', 'line 33');	
 			return true;
 		}
-		
+		CakeLog::write('error', 'line 36');				
 		$models = explode(',', Inflector::camelize($role));
 		foreach ($models as $model) {
 			$exists = ClassRegistry::init($model)->find('count', array(
@@ -40,10 +42,14 @@ class CourseAuthorize extends BaseAuthorize {
 					'course_id' => $request->params['pass'][0]
 				)
 			));
+			
 			if ($exists) {
+				CakeLog::write('error', 'line 47');				
 				return true;
 			}
 		}
+		
+		CakeLog::write('error', 'line 52');				
 		return false;
 		
 	}
