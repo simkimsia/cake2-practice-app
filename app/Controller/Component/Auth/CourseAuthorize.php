@@ -18,21 +18,18 @@ class CourseAuthorize extends BaseAuthorize {
  */
 	public function authorize($user, CakeRequest $request) {
 		
-		CakeLog::write('error', 'enters here');
-		if (!empty($user['admin'])) {
+		if ($user['admin']) {
 			return true;
 		}
-		CakeLog::write('error', 'line 25');		
 		$role = Configure::read('Permissions.' . $this->action($request));
 		
 		if (!$role) {
-					CakeLog::write('error', 'line 29');	
 			return false;
 		}
 		if ($role === '*') {
-					CakeLog::write('error', 'line 33');	
 			return true;
 		}
+		
 		CakeLog::write('error', 'line 36');				
 		$models = explode(',', Inflector::camelize($role));
 		foreach ($models as $model) {
@@ -43,13 +40,11 @@ class CourseAuthorize extends BaseAuthorize {
 				)
 			));
 			
-			if ($exists) {
-				CakeLog::write('error', 'line 47');				
+			if ($exists) {		
 				return true;
 			}
 		}
-		
-		CakeLog::write('error', 'line 52');				
+				
 		return false;
 		
 	}
