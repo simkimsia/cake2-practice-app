@@ -45,9 +45,10 @@ class AppController extends Controller {
 						'fields' => array('username' => 'email')
 					)
 				),
-				//'authorize' => array('Course'),
+				'authorize' => array('Course'),
 			),
-			'Session'
+			'Session',
+			'RequestHandler'
 		);
 
 	/**
