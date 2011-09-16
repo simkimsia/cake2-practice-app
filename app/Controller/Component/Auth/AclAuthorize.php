@@ -27,8 +27,7 @@ class AclAuthorize extends BaseAuthorize {
 		if (!empty($user['admin'])) {
 			return true;
 		}
-		//return true;
-$userModel = ClassRegistry::init('User');
+
 		$userRole = $user['group_id'];
 		
 		$currentAction = $this->action($request);
@@ -46,38 +45,32 @@ $userModel = ClassRegistry::init('User');
 		
 		// action does NOT appear in either list
 		if ($actionIsDeniedToAll ) {
-			$userModel->log('deniedToall');
 			return false;
 		}
 		
 		// action appears in first list and the roles allowed is *
 		if ($actionAllowedToAllRoles) {
-						$userModel->log('allow to all');
 			return true;
 		}
 		
 		// we check if current user has a role that is allowed for this action
 		if ($checkActionsOnly) {
-			$userModel->log('checkActionsOnly');
 			return $this->checkUserHasAccessToActionByRoles($userRole, $rolesAllowedOnActionOnly);
 		}
 
 		// we check if current user has a role that is allowed for this action
 		// AND database for access to object
 		if ($checkObjectsOnly) {
-			$userModel->log('checkobjects only');
 			$accessToAction = $this->checkUserHasAccessToActionByRoles($userRole, $rolesAllowedOnObjectOnly);
 			
 			// stop checking any further if user does NOT even have access to action
 			if (!$accessToAction) {
-				$userModel->log('no access to action when check objects');
 				return false;
-			}
-			$userModel->log('check objects allow access to object');			
+			}			
+			
 			return $this->checkUserHasAccessToObject($currentAction, $user['id'], $request->params['pass']);
 		}			
 		
-		$userModel->log('denied for default');
 		return false;
 		
 	}
@@ -95,14 +88,11 @@ $userModel = ClassRegistry::init('User');
 			return true;
 		}
 		$groupModel = ClassRegistry::init('Group');
-		
-		$groupModel->log($rolesAllowedForAction);
-				
+
 		$roles = explode(',', $rolesAllowedForAction);
 		foreach($roles as $key=>$role) {
 			$roles[$key] = Inflector::pluralize($role);
 		}
-$groupModel->log($roles);
 		
 		$results = $groupModel->find('all', array(
 			'conditions' => array(
@@ -113,54 +103,189 @@ $groupModel->log($roles);
 			)
 		));
 		
-		$groupModel->log($results);
 		$allGroupIdsAllowed = Set::extract('/Group/id', $results);
-		$groupModel->log($allGroupIdsAllowed);		
+
 		return in_array($userRole, $allGroupIdsAllowed);
 		
 	}
 	
-	private function getModelForCheckingAccess($currentAction) {
+	
+	/**
+	 * 
+	 * Gets the model class associated for checking access. 
+	 * If User hasMany Object, then the model returned is the Object. If User hasAndBelongsToMany Object, 
+	 * the model returned is the relationModel
+	 *
+	 * @param string $currentAction
+	 * @return array An array containing the model class and the foreign keys
+	**/
+	private function getModelAndKeysForCheckingAccess($currentAction) {
 		// if the action has a specific model that we need to use for checking access,
 		// then we use it as stated in the list
+				
 		if (array_key_exists($currentAction, $this->customActionToModelList)) {
-			return ClassRegistry::init($this->customActionToModelList[$currentAction]);
+
+			$customActionToModel = $this->customActionToModelList[$currentAction];
+			if (is_string($customActionToModel)) {
+				$modelName = $this->customActionToModelList[$currentAction];
+			} 
+			if (is_array($customActionToModel) && !empty($customActionToModel['model'])) {
+
+				$modelName = $this->customActionToModelList[$currentAction]['model'];
+			}
+
+			$model = ClassRegistry::init($modelName);
+		
+			$keys = isset($customActionToModel['keys']) && (is_array($customActionToModel)) ? $customActionToModel['keys'] : null;
+			
+			return array('model' => $model, 'keys' => $keys);
 		}
+		
 		
 		// otherwise, we assume that the first part of the action is the model to use
 		$actionInArray = explode('/', $currentAction);
+		$actionInArray = array_values(array_filter($actionInArray));
+		
 		
 		if (!empty($actionInArray[0])) {
+		    
+			$modelName = Inflector::singularize(Inflector::camelize($actionInArray[0]));
+		
+			$possibleChildModel = ClassRegistry::init($modelName);
+			$parentModel 		= ClassRegistry::init('User');
 			
-			$modelName = Inflector::camelize($actionInArray[0]);			
-			//$modelName = 'Workshop';			
-			return ClassRegistry::init($modelName);
+			// assume that if User hasMany possibleChildModel then it is a direct relationship
+			if ($this->checkParentChildRelation($parentModel, $possibleChildModel)) {
+				return array('model'=>$possibleChildModel, 'keys'=>null);
+			} else {
+				// now we assume it's a many-to-many and return the relationModel involved
+				return $this->getRelationModelAndKeys($parentModel, $possibleChildModel);
+				
+			}
 		}
 
 		return false;
 	}
 	
-	private function formConditionsArrayToCheckAccess($model, $userId, $objectId) {
-		
-		// assume User is the parent model
-		// assume User hasMany Object
-		foreach($model->belongsTo as $association) {
-			if ($association['className'] === 'User') {
+	
+	/**
+	 * 
+	 * Gets the relationModel between the 2 models. The assumption is that
+	 * both models hasMany relationModel. RelationModel belongsTo both models
+	 *
+	 * @param Model $userModel 
+	 * @param Model $objectModel 
+	 * @return Model
+	**/
+	private function getRelationModelAndKeys($userModel, $objectModel) {
 				
-				return array($model->name . '.' . $association['foreignKey'] => $userId, 
-						     $model->name . '.id' 							 => $objectId);
+		$userModelHasManyModelList 	 = array();
+		$objectModelHasManyModelList = array();
+		
+		// loop through all the hasMany of the userModel
+		foreach($userModel->hasMany as $alias=>$association) {
+			$className = $association['className'];
+			$userModelHasManyModelList[$alias] = $className;
+		}
+		
+		// loop through all the hasMany of the objectModel
+		foreach($userModel->hasMany as $alias=>$association) {
+			$className = $association['className'];
+			$objectModelHasManyModelList[$alias] = $className;
+		}
+		
+		$relationModelList = array_intersect($userModelHasManyModelList, $objectModelHasManyModelList);
+		
+		$keys = array();
+		if (!empty($relationModelList)) {
+			
+			$allPossibleRelationClass = array_values($relationModelList);
+
+			$parentAlias = array_search($allPossibleRelationClass[0], $userModelHasManyModelList);
+			$keys[] = $userModel->hasMany[$parentAlias]['foreignKey'];
+			
+			$childAlias = array_search($allPossibleRelationClass[0], $objectModelHasManyModelList);
+			$keys[] = $objectModel->hasMany[$childAlias]['foreignKey'];
+			
+			$model = ClassRegistry::init($allPossibleRelationClass[0]);
+			
+			return array('model' => $model, 'keys' => $keys);
+		}
+		
+		return false;
+	}
+
+	/**
+	 * 
+	 * returns true if parentModel hasMany childModel
+	 *
+	 * @param Model $userModel 
+	 * @param Model $objectModel 
+	 * @return Model
+	**/	
+	private function checkParentChildRelation ($parentModel, $childModel) {
+		foreach($parentModel->hasMany as $association) {
+			if ($association['className'] == $childModel->name) {
+				return true;
 			}
 		}
+		return false;
 	}
 	
+	/**
+	 * 
+	 * customize the conditions for checking access to the records
+	 *
+	 * @param array $model The model used for checking access. If many-to-many, this is the relationModel.
+	 * @param integer or string $userId 
+	 * @param integer or string $objectId
+	 * @param array $keys An array of field names for foreign keys. First one is for userId
+	 * @return array
+	**/
+	private function formConditionsArrayToCheckAccess($model, $userId, $objectId, $keys = null) {
+
+		if ($keys == null) {
+			// direct parent child relation
+			// assume User is the parent model
+			// assume User hasMany Object
+
+			foreach($model->belongsTo as $association) {
+				if ($association['className'] === 'User') {
+
+					return array($model->name . '.' . $association['foreignKey'] => $userId, 
+							     $model->name . '.id' 							 => $objectId);
+				}
+			}
+			
+		} else {
+			return array(
+						$model->name . '.' . $keys[0] => $userId,
+						$model->name . '.' . $keys[1] => $objectId,	
+					);
+		}
+		
+	}
+	
+	
+	/**
+	 * 
+	 * Check if current User has access to the Object associated with current request
+	 *
+	 * @param string $currentAction
+	 * @param integer or string $userId 
+	 * @param array $requestParams Current request->params->['pass']
+	 * @return boolean
+	**/	
 	private function checkUserHasAccessToObject($currentAction, $userId, $requestParams) {
 		
 		$objectId = isset($requestParams[0]) ? $requestParams[0] : 0;
 		
-		$model = $this->getModelForCheckingAccess($currentAction);
+		$modelKeysArray = $this->getModelAndKeysForCheckingAccess($currentAction);
+		
+		$model = $modelKeysArray['model'];
 
-		if ($model) {
-			$conditions = $this->formConditionsArrayToCheckAccess($model, $userId, $objectId);
+		if ($modelKeysArray) {
+			$conditions = $this->formConditionsArrayToCheckAccess($model, $userId, $objectId, $modelKeysArray['keys']);
 			
 			$exists = $model->find('count', array(
 				'conditions' => $conditions

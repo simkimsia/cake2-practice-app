@@ -49,6 +49,41 @@ class User extends AppModel {
 	);
 	
 /**
+ * hasMany associations
+ *
+ * @var array
+ */
+	public $hasMany = array(
+		'Instructor' => array(
+			'className' => 'Instructor',
+			'foreignKey' => 'user_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Student' => array(
+			'className' => 'Student',
+			'foreignKey' => 'user_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		)
+	);
+
+	
+/**
  * beforeSave method
  *
  * @param array $options
