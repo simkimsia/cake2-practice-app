@@ -45,7 +45,8 @@ class AppController extends Controller {
 						'fields' => array('username' => 'email')
 					)
 				),
-				'authorize' => array('Course'),
+				'authorize' => array(//'Course',
+				 					'Acl'),
 			),
 			'Session',
 			'RequestHandler'
@@ -60,6 +61,8 @@ class AppController extends Controller {
 			//parent::beforeFilter();
 			// set default for loginRedirect
 			$this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'index');
+			// error message for authorization errors
+			$this->Auth->authError = 'You are NOT authorized';
 		}
 	
 }

@@ -18,7 +18,7 @@ class CourseAuthorize extends BaseAuthorize {
  */
 	public function authorize($user, CakeRequest $request) {
 		
-		if ($user['admin']) {
+		if (!empty($user['admin'])) {
 			return true;
 		}
 		$role = Configure::read('Permissions.' . $this->action($request));
@@ -29,21 +29,25 @@ class CourseAuthorize extends BaseAuthorize {
 		if ($role === '*') {
 			return true;
 		}
-		
-		CakeLog::write('error', 'line 36');				
+					
 		$models = explode(',', Inflector::camelize($role));
-		foreach ($models as $model) {
-			$exists = ClassRegistry::init($model)->find('count', array(
-				'conditions' => array(
-					'user_id' => $user['id'],
-					'course_id' => $request->params['pass'][0]
-				)
-			));
-			
-			if ($exists) {		
-				return true;
+		
+		if (isset($request->params['pass'][0])) {
+			$courseId = $request->params['pass'][0];
+			foreach ($models as $model) {
+				$exists = ClassRegistry::init($model)->find('count', array(
+					'conditions' => array(
+						'user_id' => $user['id'],
+						'course_id' => $courseId,
+					)
+				));
+
+				if ($exists) {		
+					return true;
+				}
 			}
 		}
+		
 				
 		return false;
 		

@@ -38,6 +38,16 @@ class User extends AppModel {
 		),
 	);
 	
+	public $belongsTo = array(
+		'Group' => array(
+			'className' => 'Group',
+			'foreignKey' => 'group_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
+	);
+	
 /**
  * beforeSave method
  *

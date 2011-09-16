@@ -16,6 +16,7 @@ class CoursesController extends AppController {
 			parent::beforeFilter();
 			// allowing following actions to be public
 			$this->Auth->allow('add');
+					$this->log('beforeFilter in courses');
 		}
 
 /**
@@ -66,6 +67,7 @@ class CoursesController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
+		$this->log('test');
 		$this->Course->id = $id;
 		if (!$this->Course->exists()) {
 			throw new NotFoundException(__('Invalid course'));
