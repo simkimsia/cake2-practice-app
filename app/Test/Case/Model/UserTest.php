@@ -24,6 +24,18 @@ class UserTestCase extends CakeTestCase {
 
 		$this->User = ClassRegistry::init('User');
 	}
+	
+	
+/**
+ * Test calculate method
+ *
+ * @return boolean
+ */
+	public function testCalculate() {
+		$this->assertEquals($this->User->calculate(3, 5), 8);
+
+	}	
+	
 
 /**
  * tearDown method
