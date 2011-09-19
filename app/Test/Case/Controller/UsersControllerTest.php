@@ -42,12 +42,12 @@ class UsersControllerTestCase extends ControllerTestCase {
 
 		$this->UsersController = new TestUsersController();
 		//$this->Users->constructClasses();
-		$this->Users = $this->generate('Users', array( 
-                					'components' => array( 
-                    						'Session' 
-                    					) 
-               	 				) 
-            			); 
+		$this->Users = $this->generate('Users', array(
+			'components' => array(
+				'Session'
+				)
+			)
+		);
 	}
 	
 /**

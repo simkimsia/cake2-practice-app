@@ -10,3 +10,6 @@
 [submodule "app/Plugin/ClearCache"]
 	path = app/Plugin/ClearCache
 	url = git@github.com:ceeram/clear_cache
+[submodule "app/Plugin/Templates"]
+	path = app/Plugin/Templates
+	url = git@github.com:CakeDC/templates.git
