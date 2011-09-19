@@ -15,3 +15,4 @@ app/tests/*
 *.DS_Store
 tags
 *.tmproj
+app/webroot/coverage/*
