@@ -50,8 +50,8 @@ class UsersControllerTestCase extends CakeTestCase {
  * @return void
  */	
 	public function testIndex() {
-        $result = $this->testAction('/users/index');
-        debug($result);
+    	$result = $this->testAction('/users/index');
+    	debug($result);
     }
 
 /**
