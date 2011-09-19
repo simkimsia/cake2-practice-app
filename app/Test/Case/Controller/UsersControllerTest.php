@@ -31,7 +31,7 @@ class TestUsersController extends UsersController {
  * UsersController Test Case
  *
  */
-class UsersControllerTestCase extends CakeTestCase {
+class UsersControllerTestCase extends ControllerTestCase {
 /**
  * setUp method
  *
