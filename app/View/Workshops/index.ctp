@@ -8,7 +8,6 @@
 			<th class="actions"><?php echo __('Actions');?></th>
 	</tr>
 	<?php
-	echo 'something stupid';
 	$i = 0;
 	foreach ($workshops as $workshop): ?>
 	<tr>

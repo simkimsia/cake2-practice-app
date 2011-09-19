@@ -95,4 +95,17 @@ class User extends AppModel {
 		}
         return true;
     }
+
+
+/**
+ * add 2 numbers and return sum
+ *
+ * @param integer $param1
+ * @param integer $param2
+ * @return integer 
+ */
+	function calculate($param1=0, $param2=0) {
+		return intval($param1) + intval($param2);
+	}
+
 }
