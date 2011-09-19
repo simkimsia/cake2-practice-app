@@ -41,7 +41,13 @@ class UsersControllerTestCase extends CakeTestCase {
 		parent::setUp();
 
 		$this->UsersController = new TestUsersController();
-		$this->Users->constructClasses();
+		//$this->Users->constructClasses();
+		$this->Users = $this->generate('Users', array( 
+                					'components' => array( 
+                    						'Session' 
+                    					) 
+               	 				) 
+            			); 
 	}
 	
 /**
